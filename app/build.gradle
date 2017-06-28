@@ -1,0 +1,30 @@
+apply plugin: 'com.android.application'
+
+def apkName = "Satori-00"
+
+android {
+    compileSdkVersion 18
+    buildToolsVersion "25.0.3"
+
+    defaultConfig {
+        applicationId "com.eemagine.satori"
+        minSdkVersion 18
+        targetSdkVersion 18
+    }
+
+    buildTypes {
+        debug {
+            ndk {
+                abiFilters "x86","armeabi-v7a"
+            }
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
+}
