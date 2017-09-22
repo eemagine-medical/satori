@@ -2,6 +2,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 // system
+#include <cstdlib>
+#include <cmath>
 #include <chrono>
 #include <memory>
 #include <mutex>
@@ -9,12 +11,6 @@
 #include <thread>
 // android
 #include <android/log.h>
-// boost
-#include <boost/format.hpp>
-// libeep
-extern "C" {
-#include <v4/eep.h>
-}
 // eemagine SDK
 #include <eemagine/sdk/factory.h>
 // self
@@ -336,8 +332,10 @@ void sdk_helper_init(const char * data_path)
 
 		SDK_MARKER_C_STR(__FUNCTION__);
 		auto v(sdk_context_instance().factory.getVersion());
+#if 0
 		std::string msg(boost::str(boost::format("eemagine com.eemagine.satori version(%i, %i, %i, %i)") % v.major % v.minor % v.micro % v.build));
 		SDK_MARKER_C_STR(msg.c_str());
+#endif
 	} catch(const std::exception &e) {
 		SDK_MARKER_C_STR(e.what());
 	} catch(...) {

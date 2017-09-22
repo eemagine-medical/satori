@@ -1,30 +1,46 @@
 apply plugin: 'com.android.application'
 
-def apkName = "Satori-00"
-
 android {
-    compileSdkVersion 18
-    buildToolsVersion "25.0.3"
-
+    compileSdkVersion 25
+    buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.eemagine.satori"
         minSdkVersion 18
         targetSdkVersion 18
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=gnustl_shared", "-DANDROID_DEPRECATED_HEADERS=ON"
+                cppFlags "-frtti -fexceptions"
+            }
+        }
     }
-
     buildTypes {
         debug {
-            ndk {
-                abiFilters "x86","armeabi-v7a"
-            }
+          debuggable true
+        }
+        release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     externalNativeBuild {
-        ndkBuild {
-            path 'src/main/jni/Android.mk'
+        cmake {
+            path "CMakeLists.txt"
         }
     }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    testCompile 'junit:junit:4.12'
 }
