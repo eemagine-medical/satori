@@ -27,8 +27,8 @@ struct vertex {
 };
 
 struct summary {
-    double alpha;
-    double theta;
+    double indicator0;
+    double indicator1;
     bool session;
 };
 
