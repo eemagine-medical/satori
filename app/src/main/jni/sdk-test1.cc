@@ -241,9 +241,9 @@ void draw_frame(struct engine* engine)
 
 	summary s = sdk_helper_get_session_summary();
 	if(s.session) {
-		// dark red (0.6, 0, 0) for alpha=1, theta=0
-		// pale blue (0.4, 0.4, 1.0) for alpha=0, theta=0
-		glClearColor(0.6*s.alpha + 0.4*s.theta, 0.4*s.theta, s.theta, 0.8);
+		// dark red (0.6, 0, 0) for indicator0=1, indicator1=0
+		// pale blue (0.4, 0.4, 1.0) for indicator0=0, indicator1=0
+		glClearColor(0.6*s.indicator1 + 0.4*s.indicator0, 0.4*s.indicator0, s.indicator0, 0.8);
 	} else {
 		glClearColor(0.2, 0.2, 0.2, 0.8);
 	}

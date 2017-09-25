@@ -95,8 +95,9 @@ public:
 	sdk_context() : scaling(1.0)
 	{
 		_session = std::make_shared<sdk_session>(nullptr, "", 0);
-		_powerFilters.push_back(StateVariableFilter(5.5, 0.5)); // theta
-		_powerFilters.push_back(StateVariableFilter(11.0, 0.5)); // alpha
+		// 5.5 - theta, 11.0 - alpha
+		_powerFilters.push_back(StateVariableFilter(8.25, 0.5)); // indicator0 - between alpha and theta, mildly broad
+		_powerFilters.push_back(StateVariableFilter(20.0, 0.2)); // indicator1 - well above alpha and theta, really broad
 		for (int i=0; i<8; ++i)
 			_channelFilters.push_back(StateVariableFilter(15.0, 1.0));
 	}
@@ -105,7 +106,7 @@ public:
 	static const size_t sample_count = 1024 * 2;
 	float scaling;
 
-	// providing pand power for alpha and theta
+	// providing pand power for indicator0 and indicator1
 	vertex bandPowerVertices[sample_count * 2];
 	vertex channelVertices[sample_count * channel_count];
 	eemagine::sdk::factory factory;
@@ -536,14 +537,14 @@ summary sdk_helper_get_session_summary()
 	auto session(sdk_context_instance().get_session());
 	summary result;
 	result.session = session->is_valid();
-	double theta = sdk_context::_powerFilters[0].getBandPower();
-	double alpha = sdk_context::_powerFilters[1].getBandPower();
-	if (alpha+theta > 0.0) {
-		result.alpha = alpha / (alpha + theta);
-		result.theta = theta / (alpha + theta);
+	double ind0 = sdk_context::_powerFilters[0].getBandPower();
+	double ind1 = sdk_context::_powerFilters[1].getBandPower();
+	if (ind0+ind1 > 0.0) {
+		result.indicator0 = ind0 / (ind0 + ind1);
+		result.indicator1 = ind1 / (ind0 + ind1);
 	} else {
-		result.alpha = 0.0;
-		result.theta = 0.0;
+		result.indicator0 = 0.0;
+		result.indicator1 = 0.0;
 	}
 	return result;
 }
